@@ -19,6 +19,6 @@ import { defineConfig } from 'astro/config';
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default defineConfig({
-  site: 'https://farid-mitri.github.io',
-  base: '/',
+  site: 'https://faridmitri.github.io',
+  base: '/portfolio',
 });

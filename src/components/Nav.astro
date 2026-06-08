@@ -1,0 +1,255 @@
+---
+import { profile } from '../data/profile';
+
+// Section anchors shown in the nav. Order matches the page.
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#expert-badges', label: 'Expert' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#certifications', label: 'Certifications' },
+  { href: '#awards', label: 'Awards' },
+  { href: '#learning', label: 'Training' },
+];
+
+const initials = profile.name
+  .split(' ')
+  .map((p) => p[0])
+  .join('')
+  .slice(0, 2);
+---
+
+<header class="nav" id="site-nav" data-state="top">
+  <div class="container nav-inner">
+    <a href="#top" class="brand" aria-label={`${profile.name} — home`}>
+      <span class="monogram">{initials}</span>
+      <span class="brand-name">{profile.name}</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      {links.map((l) => (
+        <a href={l.href} class="nav-link" data-link={l.href}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <a href="#contact" class="btn btn-primary nav-cta">Get in touch</a>
+
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    {links.map((l) => (
+      <a href={l.href} class="mobile-link" data-link={l.href}>{l.label}</a>
+    ))}
+    <a href="#contact" class="btn btn-primary mobile-cta">Get in touch</a>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .nav[data-state='scrolled'] {
+    background: rgba(7, 11, 20, 0.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom-color: var(--border);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 68px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .monogram {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #06070d;
+    background: var(--gradient);
+    box-shadow: 0 6px 18px -6px var(--accent-glow);
+  }
+  .brand-name {
+    font-size: 1.02rem;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .nav-link {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease;
+    position: relative;
+  }
+  .nav-link:hover {
+    color: var(--text);
+  }
+  .nav-link.active {
+    color: var(--text);
+  }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient);
+  }
+  .nav-cta {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+  }
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem;
+    cursor: pointer;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .nav[data-menu='open'] .nav-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav[data-menu='open'] .nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav[data-menu='open'] .nav-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.8rem clamp(1.1rem, 4vw, 2rem) 1.4rem;
+    background: rgba(7, 11, 20, 0.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-link {
+    padding: 0.85rem 0.4rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    font-size: 1rem;
+  }
+  .mobile-link.active {
+    color: var(--text);
+  }
+  .mobile-cta {
+    margin-top: 0.9rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 860px) {
+    .nav-links,
+    .nav-cta {
+      display: none;
+    }
+    .nav-toggle {
+      display: flex;
+    }
+    .nav[data-menu='open'] .mobile-menu {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const setup = () => {
+    const nav = document.getElementById('site-nav');
+    if (!nav) return;
+    const toggle = nav.querySelector<HTMLButtonElement>('.nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+
+    // Background change on scroll
+    const onScroll = () => {
+      nav.setAttribute('data-state', window.scrollY > 24 ? 'scrolled' : 'top');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Mobile menu toggle
+    const closeMenu = () => {
+      nav.removeAttribute('data-menu');
+      toggle?.setAttribute('aria-expanded', 'false');
+      if (menu) menu.hidden = true;
+    };
+    toggle?.addEventListener('click', () => {
+      const open = nav.getAttribute('data-menu') === 'open';
+      if (open) {
+        closeMenu();
+      } else {
+        nav.setAttribute('data-menu', 'open');
+        toggle.setAttribute('aria-expanded', 'true');
+        if (menu) menu.hidden = false;
+      }
+    });
+    menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+
+    // Scroll-spy: highlight the link for the section in view
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-link]'));
+    const map = new Map<string, HTMLAnchorElement[]>();
+    links.forEach((l) => {
+      const id = l.getAttribute('data-link')!.replace('#', '');
+      if (!map.has(id)) map.set(id, []);
+      map.get(id)!.push(l);
+    });
+    const sections = Array.from(map.keys())
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+
+    if ('IntersectionObserver' in window) {
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              links.forEach((l) => l.classList.remove('active'));
+              map.get(entry.target.id)?.forEach((l) => l.classList.add('active'));
+            }
+          });
+        },
+        { rootMargin: '-45% 0px -50% 0px' }
+      );
+      sections.forEach((s) => spy.observe(s));
+    }
+  };
+  setup();
+  document.addEventListener('astro:after-swap', setup);
+</script>

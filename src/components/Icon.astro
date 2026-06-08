@@ -1,0 +1,80 @@
+---
+// Lightweight inline-SVG icon set. Usage: <Icon name="cloud" />
+// All icons inherit currentColor and use a 24x24 viewBox.
+// Add a new icon by adding a key to `paths` below.
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  /** stroke | fill — most here are stroke icons */
+  label?: string;
+}
+const { name, size = 20, class: className = '', label } = Astro.props;
+
+const paths: Record<string, string> = {
+  // brand / contact
+  linkedin:
+    '<path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z"/><path d="M3 9h4v12H3zM10 9h3.8v1.7h.05a4.16 4.16 0 0 1 3.75-2.06C21.2 8.64 22 11 22 14.1V21h-4v-6.1c0-1.46-.03-3.33-2.03-3.33-2.03 0-2.34 1.58-2.34 3.22V21h-4z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  phone:
+    '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>',
+  'map-pin': '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  github:
+    '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0 0 20 4.8 4.9 4.9 0 0 0 19.9 1S18.7.6 16 2.5a13.4 13.4 0 0 0-7 0C6.3.6 5.1 1 5.1 1A4.9 4.9 0 0 0 5 4.8 5.2 5.2 0 0 0 3.7 8.4c0 5.2 3.2 6.4 6.2 6.7A3.4 3.4 0 0 0 9 17.7V22"/>',
+
+  // skill groups
+  cloud: '<path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97 6 6 0 0 0-11.66-1.6A4.5 4.5 0 0 0 6.5 19h11Z"/>',
+  database:
+    '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>',
+  sparkles:
+    '<path d="m12 3 1.9 4.8L18.7 9.7 13.9 11.6 12 16.4 10.1 11.6 5.3 9.7 10.1 7.8 12 3Z"/><path d="M19 14l.8 2 .7-2 2-.8-2-.7zM5 16l.6 1.5L7 18l-1.4.6L5 20l-.6-1.4L3 18l1.4-.5z"/>',
+  bot: '<rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 8V4M8 2h8"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="13" r="1.2"/><path d="M2 13h2M20 13h2"/>',
+  code: '<path d="m8 18-6-6 6-6M16 6l6 6-6 6"/>',
+  chart: '<path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="13" width="3" height="4" rx="0.5"/>',
+
+  // section icons
+  briefcase:
+    '<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M2.5 12.5h19"/>',
+  rocket:
+    '<path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8a2 2 0 0 0-3 0Z"/><path d="M12 15 9 12a16 16 0 0 1 4-8c1.8-1.8 5-2 6.5-2 .1 1.5-.2 4.7-2 6.5a16 16 0 0 1-8 4Z"/><path d="M9 12H4s.5-2.8 2-4 4-1 4-1M12 15v5s2.8-.5 4-2 1-4 1-4"/><circle cx="15" cy="9" r="1.3"/>',
+  certificate:
+    '<circle cx="12" cy="9" r="6"/><path d="M9 13.5 8 21l4-2 4 2-1-7.5"/><path d="m10 9 1.5 1.5L15 7"/>',
+  award: '<circle cx="12" cy="8" r="6"/><path d="M8.2 13 7 22l5-3 5 3-1.2-9"/>',
+  'graduation':
+    '<path d="M22 9 12 5 2 9l10 4 10-4Z"/><path d="M6 11v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/><path d="M22 9v6"/>',
+  globe:
+    '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  layers: '<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+
+  // ui
+  'arrow-up-right': '<path d="M7 17 17 7M8 7h9v9"/>',
+  'arrow-down': '<path d="M12 5v14M5 12l7 7 7-7"/>',
+  download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+};
+
+// Icons drawn as solid shapes rather than strokes.
+const filled = new Set(['linkedin']);
+const isFilled = filled.has(name);
+
+const d = paths[name] ?? '';
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill={isFilled ? 'currentColor' : 'none'}
+  stroke={isFilled ? 'none' : 'currentColor'}
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`icon icon-${name} ${className}`.trim()}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  set:html={d}
+/>

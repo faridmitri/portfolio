@@ -1,0 +1,132 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${profile.name} — ${profile.title}`,
+  description = profile.tagline,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(`${import.meta.env.BASE_URL}og-image.svg`, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#070b14" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- If JS is disabled, reveal all content immediately -->
+    <noscript>
+      <style>
+        [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured data for search engines -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: profile.name,
+        jobTitle: profile.title,
+        email: `mailto:${profile.email}`,
+        telephone: profile.phone,
+        address: { '@type': 'PostalAddress', addressLocality: profile.location },
+        url: canonical,
+        sameAs: profile.socials.map((s) => s.href).filter((h) => h.startsWith('http')),
+      })}
+    />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Scroll-reveal: fade sections in as they enter the viewport -->
+    <script>
+      const reveal = () => {
+        const items = document.querySelectorAll('[data-reveal]');
+        if (!('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        );
+        items.forEach((el) => io.observe(el));
+      };
+      reveal();
+      document.addEventListener('astro:after-swap', reveal);
+    </script>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -120%);
+        top: 0.6rem;
+        z-index: 200;
+        background: var(--accent);
+        color: #06070d;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+      }
+      .skip-link:focus {
+        transform: translateX(-50%);
+      }
+    </style>
+  </body>
+</html>

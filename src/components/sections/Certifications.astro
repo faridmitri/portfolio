@@ -1,0 +1,318 @@
+---
+import { certifications } from '../../data/certifications';
+import Icon from '../Icon.astro';
+
+const issuerColors: Record<string, string> = {
+  'Google Cloud': '#4285F4',
+  'Amazon Web Services': '#FF9900',
+};
+---
+
+<section id="certifications" class="section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Credentials</span>
+      <h2 class="section-title">Certifications</h2>
+      <p class="lead">Google Cloud &amp; AWS certified across data engineering, machine learning, architecture, and generative AI.</p>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="cert-lightbox" aria-modal="true" role="dialog" aria-label="Certification badge" hidden>
+      <button class="lightbox-close" id="cert-lightbox-close" aria-label="Close">✕</button>
+      <div class="lightbox-backdrop" id="cert-lightbox-backdrop"></div>
+      <img class="lightbox-img" id="cert-lightbox-img" src="" alt="" />
+    </div>
+
+    <div class="cert-grid">
+      {certifications.map((c, i) => {
+        const accentColor = issuerColors[c.issuer] ?? '#ffd479';
+        return (
+          <article
+            class="cert-card card"
+            data-reveal
+            style={`--reveal-delay: ${(i % 3) * 70}ms; --cert-color: ${accentColor}`}
+          >
+            {/* Badge — clickable to open lightbox if image available */}
+            {c.badgeImage ? (
+              <button
+                class="cert-badge cert-badge-btn"
+                data-src={c.badgeImage}
+                data-alt={c.name}
+                aria-label={`View ${c.name} badge`}
+              >
+                <img
+                  src={c.badgeImage}
+                  alt={`${c.name} badge`}
+                  class="cert-badge-img"
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                />
+                <span class="cert-badge-hint" aria-hidden="true">🔍</span>
+              </button>
+            ) : (
+              <div class="cert-badge">
+                <Icon name="certificate" size={32} />
+              </div>
+            )}
+
+            <div class="cert-body">
+              <h3 class="cert-name">{c.name}</h3>
+              <p class="cert-meta">
+                <span class="cert-issuer">{c.issuer}</span>
+                <span class="cert-dot">·</span>
+                <span class="cert-date">{c.date}</span>
+                {c.note && <span class="cert-note">{c.note}</span>}
+              </p>
+            </div>
+
+            {c.link && (
+              <a
+                href={c.link}
+                class="cert-verify"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Verify ${c.name} on Credly`}
+              >
+                <Icon name="arrow-up-right" size={14} />
+                <span class="cert-verify-label">Verify</span>
+              </a>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .cert-card {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 1.4rem;
+  }
+
+  /* ── Badge ───────────────────────────────────────────────────── */
+  .cert-badge {
+    display: grid;
+    place-items: center;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--cert-color, #ffd479) 8%, transparent);
+    border: 2px solid color-mix(in srgb, var(--cert-color, #ffd479) 30%, transparent);
+    overflow: hidden;
+  }
+
+  .cert-badge-btn {
+    position: relative;
+    cursor: zoom-in;
+    padding: 0;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .cert-badge-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 28px -6px color-mix(in srgb, var(--cert-color) 60%, transparent);
+  }
+  .cert-badge-btn:focus-visible {
+    outline: 2px solid var(--accent-3);
+    outline-offset: 3px;
+    border-radius: 50%;
+  }
+
+  .cert-badge-img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    padding: 0;
+    display: block;
+  }
+
+  .cert-badge-hint {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    background: rgba(7, 11, 20, 0.55);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .cert-badge-btn:hover .cert-badge-hint {
+    opacity: 1;
+  }
+
+  /* ── Text body ───────────────────────────────────────────────── */
+  .cert-body {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .cert-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .cert-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+  }
+  .cert-issuer {
+    font-weight: 500;
+    color: var(--cert-color, var(--accent));
+  }
+  .cert-dot { color: var(--text-faint); }
+  .cert-note {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+  }
+
+  /* ── Verify link ─────────────────────────────────────────────── */
+  .cert-verify {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+    color: var(--text-faint);
+    font-size: 0.78rem;
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+  }
+  .cert-verify:hover {
+    color: var(--cert-color, var(--accent-3));
+    border-color: color-mix(in srgb, var(--cert-color) 40%, transparent);
+  }
+  .cert-verify-label { font-family: var(--font-mono); }
+
+  /* ── Lightbox ────────────────────────────────────────────────── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+  }
+  .lightbox[hidden] { display: none; }
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 6, 14, 0.88);
+    backdrop-filter: blur(10px);
+    cursor: zoom-out;
+  }
+  .lightbox-img {
+    position: relative;
+    max-width: min(90vw, 480px);
+    max-height: 85vh;
+    border-radius: 18px;
+    object-fit: contain;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--border-strong);
+    background: #fff;
+    padding: 1.5rem;
+    animation: lb-in 0.25s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  @keyframes lb-in {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: rgba(7, 11, 20, 0.85);
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .lightbox-close:hover {
+    background: var(--surface-hover);
+    transform: scale(1.1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox-img { animation: none; }
+  }
+
+  @media (max-width: 760px) {
+    .cert-grid { grid-template-columns: 1fr; }
+    .cert-verify-label { display: none; }
+  }
+</style>
+
+<script>
+  (() => {
+    // Run once — use event delegation so re-renders never stack duplicate listeners.
+    if ((window as any).__certLightboxReady) return;
+    (window as any).__certLightboxReady = true;
+
+    const lightbox = document.getElementById('cert-lightbox') as HTMLElement | null;
+    const img      = document.getElementById('cert-lightbox-img') as HTMLImageElement | null;
+    const backdrop = document.getElementById('cert-lightbox-backdrop');
+    const closeBtn = document.getElementById('cert-lightbox-close');
+    if (!lightbox || !img) return;
+
+    const open = (src: string, alt: string) => {
+      img.src = src;
+      img.alt = alt;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      lightbox.hidden = true;
+      img.src = '';
+      document.body.style.overflow = '';
+    };
+
+    // Single delegated listener on document — works regardless of re-renders
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest<HTMLButtonElement>('.cert-badge-btn');
+      if (btn) {
+        e.preventDefault();
+        open(btn.dataset.src ?? '', btn.dataset.alt ?? '');
+        return;
+      }
+      if (
+        e.target === backdrop ||
+        (e.target as Element).closest('#cert-lightbox-close')
+      ) {
+        close();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox && !lightbox.hidden) close();
+    });
+  })();
+</script>

@@ -1,0 +1,383 @@
+---
+import { profile } from '../../data/profile';
+import Icon from '../Icon.astro';
+
+const initials = profile.name
+  .split(' ')
+  .map((p) => p[0])
+  .join('')
+  .slice(0, 2);
+---
+
+<section id="top" class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow" data-reveal>
+        <Icon name="map-pin" size={14} /> {profile.location}
+      </p>
+
+      <h1 class="hero-name" data-reveal style="--reveal-delay: 60ms">
+        {profile.name}
+      </h1>
+
+      <p class="hero-title gradient-text" data-reveal style="--reveal-delay: 120ms">
+        {profile.title}
+      </p>
+
+      <p class="hero-tagline" data-reveal style="--reveal-delay: 180ms">
+        {profile.tagline}
+      </p>
+
+      <div class="hero-actions" data-reveal style="--reveal-delay: 240ms">
+        <a href="#contact" class="btn btn-primary">
+          <Icon name="mail" size={17} /> Get in touch
+        </a>
+        {profile.socials
+          .filter((s) => s.href.startsWith('http'))
+          .map((s) => (
+            <a
+              href={s.href}
+              class="btn btn-ghost"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name={s.icon} size={17} /> {s.label}
+            </a>
+          ))}
+        {profile.resumeUrl && (
+          <a href={profile.resumeUrl} class="btn btn-ghost" download>
+            <Icon name="download" size={17} /> Download CV
+          </a>
+        )}
+      </div>
+
+      {/* <dl class="hero-stats" data-reveal style="--reveal-delay: 300ms">
+        {stats.map((s) => (
+          <div class="hero-stat">
+            <dt class="hero-stat-value gradient-text">{s.value}</dt>
+            <dd class="hero-stat-label">{s.label}</dd>
+          </div>
+        ))}
+      </dl> */}
+    </div>
+
+    <!-- Right column: avatar/photo + code card -->
+    <div class="hero-right" data-reveal style="--reveal-delay: 200ms">
+      <!-- Avatar: shows photo if profile.avatar is set, else an initials monogram -->
+      <div class="avatar-wrap">
+        {profile.avatar ? (
+          <img
+            src={profile.avatar}
+            alt={`${profile.name} profile photo`}
+            class="avatar-photo"
+            width="240"
+            height="240"
+            loading="eager"
+          />
+        ) : (
+          <div class="avatar-mono" aria-label={`${profile.name} — initials`}>
+            <span>{initials}</span>
+          </div>
+        )}
+        {/* Status badge */}
+        {/* <span class="avatar-badge">
+          <span class="badge-dot"></span> Open to opportunities
+        </span> */}
+      </div>
+
+      <!-- "Profile as code" card — a nod to the data-engineering craft -->
+      <div class="code-card" aria-hidden="true">
+        <div class="code-head">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="code-file">profile.py</span>
+        </div>
+        <pre class="code-body"><code><span class="c-kw">class</span> <span class="c-cls">Engineer</span>:
+    name      = <span class="c-str">"Farid Mitri"</span>
+    role      = <span class="c-str">"Data and AI Engineer"</span>
+    clouds    = [<span class="c-str">"GCP"</span>, <span class="c-str">"AWS"</span>]
+    focus     = [
+        <span class="c-str">"Generative AI"</span>,
+        <span class="c-str">"Agentic AI"</span>,
+        <span class="c-str">"Data pipelines"</span>,
+    ]
+    certs     = <span class="c-num">5+</span>
+    years_xp  = <span class="c-num">12+</span></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <a href="#about" class="scroll-cue" aria-label="Scroll to content">
+    <Icon name="arrow-down" size={18} />
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: clamp(3rem, 9vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+    min-height: min(92vh, 900px);
+    display: flex;
+    align-items: center;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    width: 100%;
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.7rem, 7vw, 4.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-top: 1rem;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.15rem, 3vw, 1.7rem);
+    margin-top: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .hero-tagline {
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2.2vw, 1.16rem);
+    max-width: 36rem;
+    margin-top: 1.2rem;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: clamp(1rem, 4vw, 2.4rem);
+    margin-top: 2.6rem;
+    padding-top: 1.8rem;
+    border-top: 1px solid var(--border);
+    max-width: fit-content;
+  }
+  .hero-stat-value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    color: var(--text-faint);
+    font-size: 0.8rem;
+    margin-top: 0.35rem;
+    max-width: 9rem;
+  }
+
+  /* ── Right column ──────────────────────────────────────────────── */
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+  }
+
+  /* Avatar */
+  .avatar-wrap {
+    position: relative;
+    width: 200px;
+    flex-shrink: 0;
+  }
+  .avatar-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid transparent;
+    background:
+      linear-gradient(var(--bg-soft), var(--bg-soft)) padding-box,
+      var(--gradient) border-box;
+    box-shadow: 0 0 50px -10px var(--accent-glow);
+  }
+  .avatar-mono {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 700;
+    color: transparent;
+    background:
+      linear-gradient(var(--bg-soft), var(--bg-soft)) padding-box,
+      var(--gradient) border-box;
+    border: 3px solid transparent;
+    box-shadow: 0 0 50px -10px var(--accent-glow);
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-mono::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 25%, rgba(79, 140, 255, 0.18), rgba(139, 92, 255, 0.18));
+  }
+  .avatar-mono span {
+    position: relative;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .avatar-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    background: rgba(7, 11, 20, 0.88);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    color: var(--text-muted);
+  }
+  .badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #27c93f;
+    box-shadow: 0 0 6px #27c93f;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Code card */
+  .code-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(14, 21, 37, 0.9), rgba(8, 12, 22, 0.9));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  .code-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(139, 92, 255, 0.5), transparent 40%, rgba(34, 211, 238, 0.4));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .code-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+  .code-file {
+    margin-left: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+  .code-body {
+    margin: 0;
+    padding: 1rem 1.3rem 1.3rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.72rem, 1.5vw, 0.82rem);
+    line-height: 1.7;
+    color: #c6d2e8;
+    overflow-x: auto;
+  }
+  .c-kw { color: #8b5cff; }
+  .c-cls { color: #22d3ee; }
+  .c-fn { color: #4f8cff; }
+  .c-str { color: #7ee787; }
+  .c-num { color: #ffbd6e; }
+
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.2rem;
+    transform: translateX(-50%);
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface);
+    animation: bob 2.4s ease-in-out infinite;
+  }
+  .scroll-cue:hover { color: var(--text); }
+  @keyframes bob {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 7px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { animation: none; }
+    .badge-dot { animation: none; }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-right {
+      order: -1;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .code-card {
+      max-width: 30rem;
+      flex: 1 1 280px;
+    }
+    .avatar-wrap {
+      flex-shrink: 0;
+    }
+  }
+  @media (max-width: 560px) {
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.3rem;
+    }
+    .scroll-cue { display: none; }
+    .hero-right {
+      flex-direction: column;
+      align-items: center;
+    }
+    .code-card { max-width: 100%; }
+  }
+</style>

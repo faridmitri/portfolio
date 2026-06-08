@@ -1,0 +1,96 @@
+---
+import { workshops } from '../../data/workshops';
+import Icon from '../Icon.astro';
+---
+
+<section id="learning" class="section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Always learning</span>
+      <h2 class="section-title">Workshops &amp; training</h2>
+      <p class="lead">Hands-on Google Cloud technical training across the AI agent stack, Vertex AI, and modern data tooling.</p>
+    </div>
+
+    <ul class="ws-list">
+      {workshops.map((w, i) => (
+        <li class="ws-item" data-reveal style={`--reveal-delay: ${Math.min(i, 5) * 60}ms`}>
+          <span class="ws-icon" aria-hidden="true">
+            <Icon name="sparkles" size={16} />
+          </span>
+          <span class="ws-title">{w.title}</span>
+          <span class="ws-meta">
+            <span class="ws-loc">{w.location}</span>
+            <span class="ws-date">{w.date}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ws-list {
+    display: grid;
+    gap: 0.7rem;
+  }
+  .ws-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .ws-item:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+    transform: translateX(4px);
+  }
+  .ws-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    color: var(--accent-3);
+    background: rgba(34, 211, 238, 0.07);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .ws-title {
+    font-size: 0.96rem;
+    font-weight: 500;
+  }
+  .ws-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    white-space: nowrap;
+  }
+  .ws-loc {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+  }
+  .ws-date {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  @media (max-width: 680px) {
+    .ws-item {
+      grid-template-columns: auto 1fr;
+      row-gap: 0.6rem;
+    }
+    .ws-meta {
+      grid-column: 2;
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,237 @@
+---
+import { projects } from '../../data/projects';
+import Icon from '../Icon.astro';
+
+const workProjects = projects.filter((p) => !p.personal);
+const personalProjects = projects.filter((p) => p.personal);
+---
+
+<section id="projects" class="section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Selected work</span>
+      <h2 class="section-title">Projects &amp; impact</h2>
+      <p class="lead">Production systems I've designed and shipped — measured in cost saved, calls deflected, and pipelines that just keep running.</p>
+    </div>
+
+    <!-- Personal / side projects -->
+    {personalProjects.length > 0 && (
+      <div class="personal-block personal-block--top" data-reveal>
+        <div class="personal-head">
+          <span class="eyebrow personal-eyebrow">
+            <Icon name="code" size={14} /> Personal projects
+          </span>
+          <p class="personal-sub">Built outside of work to explore and ship new tech hands-on.</p>
+        </div>
+
+        <div class="proj-grid">
+          {personalProjects.map((p, i) => (
+            <article
+              class:list={['proj-card card personal', { featured: p.featured }]}
+              data-reveal
+              style={`--reveal-delay: ${(i % 3) * 90}ms`}
+            >
+              <div class="proj-top">
+                <span class="proj-icon personal-icon" aria-hidden="true">
+                  <Icon name="code" size={20} />
+                </span>
+                {p.metric && <span class="proj-metric">{p.metric}</span>}
+              </div>
+              <h3 class="proj-title">{p.title}</h3>
+              <p class="proj-tagline personal-tagline">{p.tagline}</p>
+              <p class="proj-desc">{p.description}</p>
+              <div class="proj-tech">
+                {p.tech.map((t) => <span class="chip">{t}</span>)}
+              </div>
+              {p.link && (
+                <a href={p.link.href} class="proj-link" target="_blank" rel="noopener noreferrer">
+                  {p.link.label} <Icon name="arrow-up-right" size={15} />
+                </a>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Professional / company work -->
+    <div class="personal-block" data-reveal>
+      <div class="personal-head">
+        <span class="eyebrow">
+          <Icon name="rocket" size={14} /> Work projects
+        </span>
+        <p class="personal-sub">Production systems designed and shipped at work.</p>
+      </div>
+
+      <div class="proj-grid">
+        {workProjects.map((p, i) => (
+          <article
+            class:list={['proj-card card', { featured: p.featured }]}
+            data-reveal
+            style={`--reveal-delay: ${(i % 3) * 90}ms`}
+          >
+            <div class="proj-top">
+              <span class="proj-icon" aria-hidden="true">
+                <Icon name="rocket" size={20} />
+              </span>
+              {p.metric && <span class="proj-metric">{p.metric}</span>}
+            </div>
+            <h3 class="proj-title">{p.title}</h3>
+            <p class="proj-tagline">{p.tagline}</p>
+            <p class="proj-desc">{p.description}</p>
+            <div class="proj-tech">
+              {p.tech.map((t) => <span class="chip">{t}</span>)}
+            </div>
+            {p.link && (
+              <a href={p.link.href} class="proj-link" target="_blank" rel="noopener noreferrer">
+                {p.link.label} <Icon name="arrow-up-right" size={15} />
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+  .proj-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+  .proj-card.featured {
+    border-color: var(--border-strong);
+    background: linear-gradient(180deg, rgba(79, 140, 255, 0.06), var(--surface));
+  }
+  .proj-card.featured::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--gradient);
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  /* Personal project cards get a distinct purple-cyan accent */
+  .proj-card.personal {
+    background: linear-gradient(180deg, rgba(139, 92, 255, 0.06), var(--surface));
+  }
+  .proj-card.personal.featured::before {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent-3));
+  }
+
+  .proj-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 1.1rem;
+  }
+  .proj-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: var(--accent-3);
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid var(--border);
+  }
+  .personal-icon {
+    color: var(--accent-2);
+    background: rgba(139, 92, 255, 0.1);
+  }
+  .proj-metric {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #7ee787;
+    background: rgba(126, 231, 135, 0.08);
+    border: 1px solid rgba(126, 231, 135, 0.2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    text-align: right;
+    line-height: 1.3;
+  }
+  .proj-title {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .proj-tagline {
+    color: var(--accent);
+    font-size: 0.86rem;
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+  .personal-tagline {
+    color: var(--accent-2);
+  }
+  .proj-desc {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    margin-top: 0.8rem;
+    flex-grow: 1;
+  }
+  .proj-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.2rem;
+  }
+  .proj-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.1rem;
+    color: var(--accent-3);
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: fit-content;
+  }
+  .proj-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Personal section divider */
+  .personal-block {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--border);
+  }
+  .personal-block--top {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+  .personal-head {
+    margin-bottom: clamp(1.8rem, 4vw, 2.5rem);
+  }
+  .personal-eyebrow {
+    color: var(--accent-2);
+  }
+  .personal-eyebrow::before {
+    background: var(--accent-2);
+  }
+  .personal-sub {
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 980px) {
+    .proj-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .proj-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <p class="footer-name">{profile.name}</p>
+      <p class="footer-role">{profile.title}</p>
+    </div>
+
+    <div class="footer-socials">
+      {profile.socials.map((s) => (
+        <a
+          href={s.href}
+          class="footer-social"
+          target={s.href.startsWith('http') ? '_blank' : undefined}
+          rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          aria-label={s.label}
+        >
+          <Icon name={s.icon} size={18} />
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© {year} {profile.name}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+    padding-block: 2.6rem 2rem;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.015));
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+  }
+  .footer-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.15rem;
+  }
+  .footer-role {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 0.6rem;
+  }
+  .footer-social {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+  .footer-social:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+  }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1.8rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 0.84rem;
+  }
+  .built a {
+    color: var(--text-muted);
+    border-bottom: 1px dotted var(--border-strong);
+  }
+  .built a:hover {
+    color: var(--accent-3);
+  }
+</style>

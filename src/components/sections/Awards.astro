@@ -1,0 +1,338 @@
+---
+import { awards } from '../../data/awards';
+
+// Distinct inline SVG per award type.
+// Each is a 48×48 illustration rendered in the card.
+const awardSVGs: Record<string, string> = {
+  trophy: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="44" height="44" fill="none">
+      <defs>
+        <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FFD479"/>
+          <stop offset="1" stop-color="#FFA040"/>
+        </linearGradient>
+      </defs>
+      <!-- Cup body -->
+      <path d="M14 8h20v14a10 10 0 0 1-20 0V8Z" fill="url(#tg)" opacity=".9"/>
+      <!-- Handles -->
+      <path d="M14 11H9a4 4 0 0 0 0 8h5" stroke="#FFD479" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M34 11h5a4 4 0 0 1 0 8h-5" stroke="#FFD479" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Stem -->
+      <path d="M24 32v6" stroke="#FFA040" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Base -->
+      <rect x="15" y="38" width="18" height="4" rx="2" fill="url(#tg)"/>
+      <!-- Star on cup -->
+      <path d="M24 14l1.5 3h3l-2.5 2 1 3-3-2-3 2 1-3-2.5-2h3z" fill="white" opacity=".7"/>
+    </svg>`,
+  medal: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="44" height="44" fill="none">
+      <defs>
+        <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#C0C0FF"/>
+          <stop offset="1" stop-color="#8B8BE8"/>
+        </linearGradient>
+        <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4f8cff"/>
+          <stop offset="1" stop-color="#8b5cff"/>
+        </linearGradient>
+      </defs>
+      <!-- Ribbon left -->
+      <path d="M18 8 14 22h8z" fill="url(#rg)" opacity=".85"/>
+      <!-- Ribbon right -->
+      <path d="M30 8 34 22h-8z" fill="url(#rg)" opacity=".85"/>
+      <!-- Medal circle -->
+      <circle cx="24" cy="30" r="12" fill="url(#mg)"/>
+      <circle cx="24" cy="30" r="9" fill="none" stroke="white" stroke-opacity=".25" stroke-width="1.5"/>
+      <!-- "2" numeral -->
+      <text x="24" y="35" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="13" font-weight="700" fill="#0b1120">2</text>
+      <!-- Top bar -->
+      <rect x="14" y="7" width="20" height="4" rx="2" fill="#4f8cff"/>
+    </svg>`,
+  gem: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="44" height="44" fill="none">
+      <defs>
+        <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#22d3ee"/>
+          <stop offset="1" stop-color="#8b5cff"/>
+        </linearGradient>
+      </defs>
+      <!-- Gem facets -->
+      <polygon points="24,6 38,18 24,42 10,18" fill="url(#gg)" opacity=".9"/>
+      <polygon points="24,6 38,18 24,22" fill="white" opacity=".2"/>
+      <polygon points="10,18 24,22 24,42" fill="black" opacity=".15"/>
+      <polygon points="24,6 10,18 24,22" fill="white" opacity=".1"/>
+      <!-- Top edge highlight -->
+      <line x1="24" y1="6" x2="38" y2="18" stroke="white" stroke-opacity=".4" stroke-width="1.2"/>
+      <line x1="24" y1="6" x2="10" y2="18" stroke="white" stroke-opacity=".25" stroke-width="1.2"/>
+    </svg>`,
+  star: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="44" height="44" fill="none">
+      <defs>
+        <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FFD479"/>
+          <stop offset="1" stop-color="#FF8C00"/>
+        </linearGradient>
+      </defs>
+      <path d="M24 6l4.5 13h13.5l-11 8 4.5 13-11-8-11 8 4.5-13-11-8h13.5z"
+        fill="url(#sg)" stroke="#FFD479" stroke-width="0.5" stroke-linejoin="round"/>
+    </svg>`,
+};
+
+const defaultSVG = awardSVGs.star;
+---
+
+<section id="awards" class="section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Recognition</span>
+      <h2 class="section-title">Awards &amp; honors</h2>
+    </div>
+
+    <!-- Lightbox overlay -->
+    <div class="lightbox" id="award-lightbox" aria-modal="true" role="dialog" aria-label="Award photo" hidden>
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
+      <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+      <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    </div>
+
+    <div class="award-grid">
+      {awards.map((a, i) => (
+        <article class="award-card card" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+          <div class="award-visual">
+            {a.image ? (
+              /* Real award photo / badge — clickable to open lightbox */
+              <button
+                class="award-img-btn"
+                data-src={a.image}
+                data-alt={a.title}
+                aria-label={`View ${a.title} photo`}
+              >
+                <img
+                  src={a.image}
+                  alt={a.title}
+                  class="award-img"
+                  width="120"
+                  height="120"
+                  loading="lazy"
+                />
+                <span class="award-img-hint" aria-hidden="true">🔍</span>
+              </button>
+            ) : (
+              /* Illustrated SVG icon for the award type */
+              <div class="award-icon-wrap" aria-hidden="true">
+                <Fragment set:html={awardSVGs[a.icon ?? 'star'] ?? defaultSVG} />
+              </div>
+            )}
+          </div>
+
+          <h3 class="award-title">{a.title}</h3>
+          <p class="award-issuer">{a.issuer}</p>
+          {a.description && <p class="award-desc">{a.description}</p>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .award-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+  .award-card {
+    padding: 2rem 1.5rem 1.7rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .award-visual {
+    margin-bottom: 1.2rem;
+  }
+  /* Clickable image button */
+  .award-img-btn {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: zoom-in;
+    display: block;
+    border-radius: 16px;
+  }
+  .award-img-btn:focus-visible {
+    outline: 2px solid var(--accent-3);
+    outline-offset: 3px;
+  }
+  .award-img-hint {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    border-radius: 16px;
+    background: rgba(7, 11, 20, 0.55);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .award-img-btn:hover .award-img-hint {
+    opacity: 1;
+  }
+  .award-img-btn:hover .award-img {
+    transform: scale(1.04);
+  }
+  /* Photo / badge image */
+  .award-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(var(--bg-soft), var(--bg-soft)) padding-box,
+      var(--gradient) border-box;
+    box-shadow: 0 8px 30px -10px var(--accent-glow);
+    transition: transform 0.25s ease;
+    display: block;
+  }
+
+  /* ── Lightbox ─────────────────────────────────────────────────── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+  }
+  .lightbox[hidden] { display: none; }
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 6, 14, 0.88);
+    backdrop-filter: blur(10px);
+    cursor: zoom-out;
+  }
+  .lightbox-img {
+    position: relative;
+    max-width: min(90vw, 780px);
+    max-height: 85vh;
+    border-radius: 18px;
+    object-fit: contain;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.8);
+    border: 1px solid var(--border-strong);
+    animation: lb-in 0.25s cubic-bezier(0.2,0.6,0.2,1);
+  }
+  @keyframes lb-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: rgba(7,11,20,0.85);
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .lightbox-close:hover {
+    background: var(--surface-hover);
+    transform: scale(1.1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox-img { animation: none; }
+  }
+  /* SVG illustration wrapper */
+  .award-icon-wrap {
+    display: grid;
+    place-items: center;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 30%, rgba(255, 212, 121, 0.12), rgba(139, 92, 255, 0.06) 70%);
+    border: 1px solid rgba(255, 212, 121, 0.2);
+    box-shadow: 0 0 30px -10px rgba(255, 180, 60, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .award-card:hover .award-icon-wrap {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 12px 35px -10px rgba(255, 180, 60, 0.35);
+  }
+  .award-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .award-issuer {
+    color: var(--accent);
+    font-size: 0.86rem;
+    font-weight: 500;
+    margin-top: 0.4rem;
+  }
+  .award-desc {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin-top: 0.8rem;
+  }
+
+  @media (max-width: 820px) {
+    .award-grid {
+      grid-template-columns: 1fr;
+      max-width: 32rem;
+      margin-inline: auto;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    if ((window as any).__awardLightboxReady) return;
+    (window as any).__awardLightboxReady = true;
+
+    const lightbox = document.getElementById('award-lightbox') as HTMLElement | null;
+    const img      = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const backdrop = document.getElementById('lightbox-backdrop');
+    if (!lightbox || !img) return;
+
+    const open = (src: string, alt: string) => {
+      img.src = src;
+      img.alt = alt;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      lightbox.hidden = true;
+      img.src = '';
+      document.body.style.overflow = '';
+    };
+
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest<HTMLButtonElement>('.award-img-btn');
+      if (btn) {
+        e.preventDefault();
+        open(btn.dataset.src ?? '', btn.dataset.alt ?? '');
+        return;
+      }
+      if (
+        e.target === backdrop ||
+        (e.target as Element).closest('#lightbox-close')
+      ) {
+        close();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox && !lightbox.hidden) close();
+    });
+  })();
+</script>

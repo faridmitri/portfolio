@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s \"https://www.credly.com/badges/1832c186-7037-43e3-b04c-e34608b36322.json\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" -L \"https://www.credly.com/badges/1832c186-7037-43e3-b04c-e34608b36322/public_url\")"
+    ]
+  }
+}

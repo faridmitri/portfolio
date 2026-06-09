@@ -15,11 +15,11 @@ import { defineConfig } from 'astro/config';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const isCloudflare = !!process.env.CF_PAGES;
-const GITHUB_BASE  = '/portfolio';
+const GITHUB_BASE = '/portfolio';
 
 export default defineConfig({
   site: isCloudflare
-    ? 'https://your-project.pages.dev'   // ← replace with your Cloudflare Pages URL
+    ? 'https://portfolio-c4r.pages.dev/'   // ← replace with your Cloudflare Pages URL
     : 'https://faridmitri.github.io',
   base: isCloudflare ? '/' : GITHUB_BASE,
 });

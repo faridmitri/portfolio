@@ -4,21 +4,22 @@ import { defineConfig } from 'astro/config';
 // ─────────────────────────────────────────────────────────────────────────────
 // DEPLOYMENT CONFIG
 //
-// For GitHub Pages you have two cases:
+// The base path is set automatically based on the CF_PAGES environment variable
+// that Cloudflare Pages injects at build time:
 //
-// 1. Project site  ->  https://<user>.github.io/<repo>/
-//    Set:  site: 'https://<user>.github.io',  base: '/<repo>'
-//    e.g.  site: 'https://farid-mitri.github.io', base: '/portfolio'
+//   Cloudflare Pages  →  base: '/'   (served from root)
+//   GitHub Pages      →  base: '/portfolio'  (served from sub-path)
 //
-// 2. User site (repo named <user>.github.io)  ->  https://<user>.github.io/
-//    Set:  site: 'https://<user>.github.io',  base: '/'
-//
-// Using a custom domain (e.g. faridmitri.com)?  ->  site: 'https://faridmitri.com', base: '/'
-//
-// Update the two values below to match your repo, then push.
+// If you rename the GitHub repo, update GITHUB_BASE below.
+// If you add a custom domain to either host, set base: '/' for that host.
 // ─────────────────────────────────────────────────────────────────────────────
 
+const isCloudflare = !!process.env.CF_PAGES;
+const GITHUB_BASE  = '/portfolio';
+
 export default defineConfig({
-  site: 'https://faridmitri.github.io',
-  base: '/portfolio',
+  site: isCloudflare
+    ? 'https://your-project.pages.dev'   // ← replace with your Cloudflare Pages URL
+    : 'https://faridmitri.github.io',
+  base: isCloudflare ? '/' : GITHUB_BASE,
 });

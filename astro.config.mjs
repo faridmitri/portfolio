@@ -14,12 +14,14 @@ import { defineConfig } from 'astro/config';
 // If you add a custom domain to either host, set base: '/' for that host.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const isCloudflare = !!process.env.CF_PAGES;
+// GitHub Actions always sets GITHUB_ACTIONS=true.
+// Cloudflare Pages and local dev don't — they use base '/'.
+const isGitHubPages = !!process.env.GITHUB_ACTIONS;
 const GITHUB_BASE = '/portfolio';
 
 export default defineConfig({
-  site: isCloudflare
-    ? 'https://portfolio-c4r.pages.dev/'   // ← replace with your Cloudflare Pages URL
-    : 'https://faridmitri.github.io',
-  base: isCloudflare ? '/' : GITHUB_BASE,
+  site: isGitHubPages
+    ? 'https://faridmitri.github.io'
+    : 'https://portfolio-c4r.pages.dev/',
+  base: isGitHubPages ? GITHUB_BASE : '/',
 });

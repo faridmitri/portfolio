@@ -1,6 +1,7 @@
 ---
 import { profile } from '../../data/profile';
 import Icon from '../Icon.astro';
+import { asset } from '../../utils/asset';
 
 const initials = profile.name
   .split(' ')
@@ -67,7 +68,7 @@ const initials = profile.name
       <div class="avatar-wrap">
         {profile.avatar ? (
           <img
-            src={profile.avatar}
+            src={asset(profile.avatar)}
             alt={`${profile.name} profile photo`}
             class="avatar-photo"
             width="240"

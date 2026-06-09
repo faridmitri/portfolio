@@ -1,5 +1,6 @@
 ---
 import { awards } from '../../data/awards';
+import { asset } from '../../utils/asset';
 
 // Distinct inline SVG per award type.
 // Each is a 48×48 illustration rendered in the card.
@@ -103,12 +104,12 @@ const defaultSVG = awardSVGs.star;
               /* Real award photo / badge — clickable to open lightbox */
               <button
                 class="award-img-btn"
-                data-src={a.image}
+                data-src={asset(a.image!)}
                 data-alt={a.title}
                 aria-label={`View ${a.title} photo`}
               >
                 <img
-                  src={a.image}
+                  src={asset(a.image!)}
                   alt={a.title}
                   class="award-img"
                   width="120"

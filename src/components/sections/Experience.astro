@@ -1,6 +1,7 @@
 ---
 import { experience } from '../../data/experience';
 import Icon from '../Icon.astro';
+import { asset } from '../../utils/asset';
 ---
 
 <section id="experience" class="section">
@@ -23,7 +24,7 @@ import Icon from '../Icon.astro';
                 {/* Company logo: real image if provided, else styled monogram */}
                 {job.logo ? (
                   <img
-                    src={job.logo}
+                    src={asset(job.logo)}
                     alt={`${job.company} logo`}
                     class="t-logo-img"
                     width="44"

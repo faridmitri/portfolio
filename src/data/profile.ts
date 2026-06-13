@@ -27,7 +27,7 @@ export const profile: Profile = {
   ],
   // Drop your CV PDF into the /public folder and point this at it to enable the
   // "Download CV" button (e.g. "/Farid-Mitri-CV.pdf"). Leave undefined to hide it.
-  resumeUrl: undefined,
+  resumeUrl: '/farid-mitri-cv.pdf',
   // Drop your photo into /public (e.g. /public/avatar.jpg) and set this path.
   // Supports .jpg, .png, .webp. Leave undefined to show the initials monogram.
   avatar: '/fm.png',

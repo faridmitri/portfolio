@@ -3,7 +3,7 @@ import type { Experience } from './types';
 // Most recent first. Add a new role by copying a block to the top.
 export const experience: Experience[] = [
   {
-    role: 'Data Engineer',
+    role: 'Senior Data Engineer',
     company: 'WorkJam',
     // logo: '/logos/workjam.svg',  // uncomment after adding the file to /public/logos/
     logoFallback: { initials: 'WJ', color: '#0057ff' },

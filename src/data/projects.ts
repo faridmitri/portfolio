@@ -54,6 +54,16 @@ export const projects: Project[] = [
   // ── Personal projects ───────────────────────────────────────────────────────
   // Add your own side projects below with personal: true.
   {
+    title: 'SnapFix — Agentic Appliance Repair Copilot',
+    tagline: 'Show it the problem. Fix it yourself.',
+    description:
+      'Built solo in 10 days for the Meta AI Developer Hackathon (Indie track, “Push the Frontier”). Upload a photo or a short video of a broken appliance: Muse Spark interviews you like a technician — media first, questions only for what the photo or video can\'t answer — then diagnoses the fault with a confidence score, a cost/time estimate, and a DIY or RISKY verdict. SAM 3.1 highlights the faulty part on your own photo, Spark verifies the highlight before you see it, and Muse Image illustrates every repair step. You get one numbered list of the exact part and tools to buy, which you pay for yourself at the retailer. Dangerous repairs are flagged RISKY with a DANGER note first; it stops only for an active emergency.',
+    tech: ['Muse Spark', 'SAM 3.1', 'Muse Image', 'Meta Model API', 'Python', 'Streamlit'],
+    link: { label: 'View on GitHub', href: 'https://github.com/faridmitri/snapfix' },
+    featured: true,
+    personal: true,
+  },
+  {
     title: 'Autonomous Digital Creator Agent',
     tagline: 'Agentic AI that researches, writes, publishes & promotes — fully autonomously',
     description:

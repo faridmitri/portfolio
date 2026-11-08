@@ -10,7 +10,7 @@ export const profile: Profile = {
   phone: '+1 (438) 462-0078',
   summary: [
     'Senior Data Engineer with 12+ years of experience designing and optimizing large-scale data and AI solutions, primarily on Google Cloud Platform (GCP) — now focused on agentic AI systems and the architecture behind them.',
-    'Proven expertise in building end-to-end MLOps / data pipelines, Generative AI applications (Vertex AI, BigQuery ML, Pub/Sub, Dataflow), and implementing robust cloud security and architecture — Professional Data Engineer and Professional Cloud Architect certified.',
+    'Proven expertise in building end-to-end MLOps / data pipelines, Generative AI applications (BigQuery ML, Pub/Sub, Dataflow), and implementing robust cloud security and architecture — Professional Data Engineer and Professional Cloud Architect certified.',
     'Expert at delivering significant business outcomes, including deploying Generative AI for self-service support and achieving substantial cost-efficiency across critical serverless pipelines.',
   ],
   socials: [

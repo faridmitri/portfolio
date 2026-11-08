@@ -20,6 +20,11 @@ export const profile: Profile = {
       icon: 'linkedin',
     },
     {
+      label: 'GitHub',
+      href: 'https://github.com/faridmitri',
+      icon: 'github',
+    },
+    {
       label: 'Email',
       href: 'mailto:faridmitri@gmail.com',
       icon: 'mail',
@@ -33,10 +38,10 @@ export const profile: Profile = {
   avatar: '/fm.png',
 };
 
-// Quick-glance numbers shown in the About section. Edit freely.
-// export const stats: Stat[] = [
-//   { value: '12+', label: 'Years of experience' },
-//   { value: '5+', label: 'Cloud certifications' },
-//   { value: '60%', label: 'HR support calls cut by GenAI' },
-//   { value: '<$1', label: 'Monthly cost of serverless pipeline' },
-// ];
+// Quick-glance numbers shown in the hero. Edit freely.
+export const stats: Stat[] = [
+  { value: '12+', label: 'Years of experience' },
+  { value: '5+', label: 'Cloud certifications' },
+  { value: '60%', label: 'HR support calls cut by GenAI' },
+  { value: '<$1', label: 'Monthly cost of serverless pipeline' },
+];

@@ -1,5 +1,5 @@
 ---
-import { profile } from '../../data/profile';
+import { profile, stats } from '../../data/profile';
 import Icon from '../Icon.astro';
 import { asset } from '../../utils/asset';
 
@@ -52,14 +52,14 @@ const initials = profile.name
         )}
       </div>
 
-      {/* <dl class="hero-stats" data-reveal style="--reveal-delay: 300ms">
+      <dl class="hero-stats" data-reveal style="--reveal-delay: 300ms">
         {stats.map((s) => (
           <div class="hero-stat">
             <dt class="hero-stat-value gradient-text">{s.value}</dt>
             <dd class="hero-stat-label">{s.label}</dd>
           </div>
         ))}
-      </dl> */}
+      </dl>
     </div>
 
     <!-- Right column: avatar/photo + code card -->
@@ -80,10 +80,11 @@ const initials = profile.name
             <span>{initials}</span>
           </div>
         )}
-        {/* Status badge */}
-        <span class="avatar-badge">
+        {/* Status badge — switched off Nov 7, 2026 at Farid's request.
+            Re-enable by uncommenting; wording is his: "Open to good opportunities". */}
+        {/* <span class="avatar-badge">
           <span class="badge-dot"></span> Open to good opportunities
-        </span>
+        </span> */}
       </div>
 
       <!-- "Profile as code" card — a nod to the data-engineering craft -->
